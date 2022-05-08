@@ -6,8 +6,8 @@ import { TicketParamsDto } from './dtos/params.dto';
 export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
-  @Get(':ticketId')
+  @Get(':digitableLine')
   async findTicket(@Param() params: TicketParamsDto) {
-    return this.ticketService.findTicket(params.ticketId);
+    return this.ticketService.findTicket(params.digitableLine);
   }
 }
