@@ -5,10 +5,10 @@ export class TicketResponseDto {
   barCode: string;
 
   @IsString()
-  amount: number;
+  amount: string;
 
   @IsString()
-  expirationDate: Date;
+  expirationDate: string;
 
   constructor(data: TicketResponseDto) {
     Object.assign(this, data);
