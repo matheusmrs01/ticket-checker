@@ -17,9 +17,10 @@ export class TicketService {
   }
 
   private getValue(valueField: string) {
-    return parseFloat(
+    const amountValue = parseFloat(
       valueField.substring(0, 8) + '.' + valueField.substring(8, 10),
     );
+    return amountValue.toLocaleString('pt-br', { minimumFractionDigits: 2 });
   }
 
   private getDueDate(salaryFactorField: number) {
@@ -27,10 +28,16 @@ export class TicketService {
       throw new BadRequestException('Incorrect salary factor.');
     }
 
-    const baseDueDate = new Date('07-10-1997');
+    const baseDueDate = new Date(1997, 10, 7);
     baseDueDate.setDate(baseDueDate.getDate() + salaryFactorField);
-    return baseDueDate;
+
+    const day = baseDueDate.getDate().toString().padStart(2, '0');
+    const month = baseDueDate.getMonth().toString().padStart(2, '0');
+    const year = baseDueDate.getFullYear();
+
+    return year + '-' + month + '-' + day;
   }
+
   private getBarCode(digitableLine: string) {
     const institutionCode = digitableLine.substring(0, 3);
     const currencyCode = digitableLine.substring(3, 4);
