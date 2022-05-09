@@ -45,6 +45,18 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Using
+
+```bash
+# Correct request for a correct typed line
+http://localhost:8080/boleto/21290001192110001210904475617405975870000002000
+
+# Incorrect requests
+http://localhost:8080/boleto/abcd0001192110001210904475617405975870000002000
+http://localhost:8080/boleto/21290001192110001210904475617405975870000002000000
+
+```
+
 ## Test
 
 ```bash
