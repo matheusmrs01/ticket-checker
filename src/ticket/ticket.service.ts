@@ -6,11 +6,13 @@ export class TicketService {
   async findTicket(digitableLine: string) {
     const barCode = this.getBarCode(digitableLine);
 
-    const amount = this.getValue(digitableLine.substring(9, 19));
+    const amount = this.getValue(barCode.substring(9, 19));
+
+    const salaryFactor = barCode.substring(5, 9);
     const expirationDate = this.getDueDate(parseFloat(salaryFactor));
 
     return new TicketResponseDto({
-      barCode: digitableLine,
+      barCode,
       amount,
       expirationDate,
     });
