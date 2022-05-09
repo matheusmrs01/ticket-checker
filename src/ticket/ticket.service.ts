@@ -3,7 +3,7 @@ import { TicketResponseDto } from './dtos/ticketResponse.dto';
 
 @Injectable()
 export class TicketService {
-  async findTicket(digitableLine: string) {
+  async getTicketInformation(digitableLine: string) {
     const barCode = this.getBarCode(digitableLine);
 
     const amount = this.getValue(barCode.substring(9, 19));

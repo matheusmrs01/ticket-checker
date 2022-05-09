@@ -7,7 +7,7 @@ export class TicketController {
   constructor(private readonly ticketService: TicketService) {}
 
   @Get(':digitableLine')
-  async findTicket(@Param() params: TicketParamsDto) {
-    return this.ticketService.findTicket(params.digitableLine);
+  async getTicketInformation(@Param() params: TicketParamsDto) {
+    return this.ticketService.getTicketInformation(params.digitableLine);
   }
 }
