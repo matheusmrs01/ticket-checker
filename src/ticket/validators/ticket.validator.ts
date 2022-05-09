@@ -12,7 +12,7 @@ export class TicketValidator implements ValidatorConstraintInterface {
     const query = args.object as TicketParamsDto;
     if (query.digitableLine.length != 47) {
       throw new BadRequestException(
-        'The typeable line of the ticket must have 44 characters.',
+        'The typeable line of the ticket must have 47 characters.',
       );
     }
 
