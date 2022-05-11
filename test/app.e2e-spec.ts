@@ -4,10 +4,12 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import {
   correctDigitableLine,
+  correctDigitableLineWith48Characters,
   correctResponseValue,
+  correctResponseValueForOtherTest,
   incorrectDigitableLine,
   incorrectDigitableLineWithWords,
-} from 'src/ticket/ticket.mocks';
+} from './../src/ticket/ticket.mocks';
 
 describe('Ticket-checker (e2e)', () => {
   let app: INestApplication;
@@ -36,13 +38,22 @@ describe('Ticket-checker (e2e)', () => {
   });
 
   describe('Test e2e for ticket informations', () => {
-    it('GET /boleto should show correct informations', async () => {
+    it('GET /boleto should show correct informations for digitable line with 47 characters', async () => {
       const { status, body } = await request(app.getHttpServer()).get(
         `/boleto/${correctDigitableLine}`,
       );
 
       expect(status).toBe(HttpStatus.OK);
       expect(body).toEqual(correctResponseValue);
+    });
+
+    it('GET /boleto should show correct informations for digitable line with 48 characters', async () => {
+      const { status, body } = await request(app.getHttpServer()).get(
+        `/boleto/${correctDigitableLineWith48Characters}`,
+      );
+
+      expect(status).toBe(HttpStatus.OK);
+      expect(body).toEqual(correctResponseValueForOtherTest);
     });
 
     it('GET /boleto should error for incorrect digitable line', async () => {
@@ -66,7 +77,8 @@ describe('Ticket-checker (e2e)', () => {
       expect(status).toBe(HttpStatus.BAD_REQUEST);
       expect(body).toEqual({
         error: 'Bad Request',
-        message: 'The typeable line of the ticket must have 47 characters.',
+        message:
+          'The typeable line of the ticket must have 47 or 48 characters.',
         statusCode: 400,
       });
     });
