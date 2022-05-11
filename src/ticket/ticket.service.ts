@@ -4,12 +4,18 @@ import { TicketResponseDto } from './dtos/ticketResponse.dto';
 @Injectable()
 export class TicketService {
   async getTicketInformation(digitableLine: string) {
-    const barCode = this.getBarCode(digitableLine);
+    const barCode =
+      digitableLine.length === 47
+        ? this.getBarCode(digitableLine)
+        : this.getBarCodeToDigitableLineWith48Characters(digitableLine);
 
-    const amount = this.getValue(barCode.substring(9, 19));
+    const amount = this.getValue(barCode, digitableLine.length);
 
     const salaryFactor = barCode.substring(5, 9);
-    const expirationDate = this.getDueDate(parseFloat(salaryFactor));
+    const expirationDate = this.getDueDate(
+      parseFloat(salaryFactor),
+      digitableLine.length,
+    );
 
     return new TicketResponseDto({
       barCode,
@@ -18,16 +24,23 @@ export class TicketService {
     });
   }
 
-  private getValue(valueField: string) {
-    const amountValue = parseFloat(
-      valueField.substring(0, 8) + '.' + valueField.substring(8, 10),
-    );
+  private getValue(valueField: string, digitableLineLength: number) {
+    const amountValue =
+      digitableLineLength == 47
+        ? parseFloat(
+            valueField.substring(9, 17) + '.' + valueField.substring(17, 19),
+          )
+        : parseFloat(
+            valueField.substring(4, 12) + '.' + valueField.substring(12, 15),
+          );
     return amountValue.toLocaleString('pt-br', { minimumFractionDigits: 2 });
   }
 
-  private getDueDate(salaryFactorField: number) {
-    if (!salaryFactorField) {
+  private getDueDate(salaryFactorField: number, digitableLineLength: number) {
+    if (!salaryFactorField && digitableLineLength == 47) {
       throw new BadRequestException('Incorrect salary factor.');
+    } else if (digitableLineLength === 48) {
+      return null;
     }
 
     const baseDueDate = new Date(1997, 10, 7);
@@ -60,6 +73,15 @@ export class TicketService {
       moreFreeField +
       restOfFreeField;
 
+    return barCode;
+  }
+
+  private getBarCodeToDigitableLineWith48Characters(digitableLine: string) {
+    const barCode =
+      digitableLine.substring(0, 11) +
+      digitableLine.substring(12, 23) +
+      digitableLine.substring(24, 35) +
+      digitableLine.substring(36, 47);
     return barCode;
   }
 }
