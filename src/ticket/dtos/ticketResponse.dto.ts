@@ -8,7 +8,7 @@ export class TicketResponseDto {
   amount: string;
 
   @IsString()
-  expirationDate: string;
+  expirationDate: string = null;
 
   constructor(data: TicketResponseDto) {
     Object.assign(this, data);
