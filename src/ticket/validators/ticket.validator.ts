@@ -10,9 +10,10 @@ import { TicketParamsDto } from '../dtos/params.dto';
 export class TicketValidator implements ValidatorConstraintInterface {
   validate(text: any, args: ValidationArguments) {
     const query = args.object as TicketParamsDto;
-    if (query.digitableLine.length != 47) {
+    const digitableLineLength = query.digitableLine.length;
+    if (digitableLineLength < 47 || digitableLineLength > 48) {
       throw new BadRequestException(
-        'The typeable line of the ticket must have 47 characters.',
+        'The typeable line of the ticket must have 47 or 48 characters.',
       );
     }
 
